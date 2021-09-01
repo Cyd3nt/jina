@@ -234,10 +234,8 @@ jobs:
         run: |
           sudo apt-get install jq
           echo "::set-output name=matrix::$(bash scripts/get-all-test-paths.sh)"
-          echo "::set-output name=macos::$(bash scripts/get-all-test-paths.sh macos)"
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-      macos: ${{ steps.set-matrix.outputs.macos }}
 
   core-test:
     needs: prep-testbed
@@ -326,7 +324,6 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [3.7]
-        test-path: ${{fromJson(needs.prep-testbed.outputs.macos)}}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -351,7 +348,7 @@ jobs:
       - name: Test
         id: test
         run: |
-          pytest --suppress-no-test-exit-code --force-flaky --min-passes 1 --max-runs 5 --timeout=360 -v -s ${{ matrix.test-path }}
+          pytest --suppress-no-test-exit-code --force-flaky --min-passes 1 --max-runs 5 --timeout=360 -v -s tests/system/*.py
         timeout-minutes: 20
         env:
           JINAHUB_USERNAME: ${{ secrets.JINAHUB_USERNAME }}
