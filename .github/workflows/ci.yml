@@ -338,6 +338,7 @@ jobs:
           brew install docker-machine docker
           docker-machine create default
           docker-machine env default
+          eval $(docker-machine env default)
           brew services start docker-machine
           docker build -f Dockerfiles/pip.Dockerfile -t jinaai/jina:test-pip .
           python -m pip install --upgrade pip
