@@ -339,6 +339,7 @@ jobs:
           brew cask install virtualbox
           docker-machine create --driver virtualbox default
           eval "$(docker-machine env default)"
+          brew services start docker-machine
           docker build -f Dockerfiles/pip.Dockerfile -t jinaai/jina:test-pip .
           python -m pip install --upgrade pip
           python -m pip install wheel
